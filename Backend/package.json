@@ -2,11 +2,11 @@
   "name": "idea-dump-backend",
   "version": "1.0.0",
   "description": "An idea dump app, nothing much.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
