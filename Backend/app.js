@@ -1,8 +1,6 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
 const connectDB = require("./DB/Connections/connectDB");
-const { getAllIdeas, addNewIdea } = require("./Controllers/ideasControllers");
 const app = express();
 exports.app = app;
 const ideasRouter = require("./Routers/ideaRouter");
