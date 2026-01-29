@@ -1,32 +1,40 @@
 const ideas = require("../DB/Models/ideaModel");
+const mongoose = require("mongoose");
 
 const addNewIdea = async (req, res) => {
   try {
     await ideas.insertOne(req.body);
     const all = await ideas.find();
-    console.log(all);
+
     res.status(201).json({ msg: "success", all });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ message: "Success", error: error.message });
   }
 };
 
 const getAllIdeas = async (req, res) => {
   try {
     const fetchedIdeas = await ideas.find();
-    res.json(fetchedIdeas);
+    res.status(200).json(fetchedIdeas);
   } catch (err) {
     res.status(500).json({ message: "An error occured", error: err.message });
   }
 };
 
 const deleteAnIdea = async (req, res) => {
-  if (!req.params.id || typeof req.params.id === String) {
-    res.status(400).json({ message: "Bad request" });
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "Invalid ID" });
   }
+
   try {
-    const data = ideas.findByIdAndDelete(req.params.id);
-    res.status(203).json("deleted successfuly");
+    const deleted = await ideas.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+
+    res.status(200).json("deleted successfuly");
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: "An error occured", error: error.message });
@@ -34,12 +42,18 @@ const deleteAnIdea = async (req, res) => {
 };
 
 const getOneIdea = async (req, res) => {
-  if (!req.params.id || typeof req.params.id === String) {
-    res.status(400).json({ message: "Bad request" });
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "Invalid ID" });
   }
+
   try {
-    const result = await ideas.findOne(req.params.id);
-    res.status(200).json(result);
+    const idea = await ideas.findById(req.params.id);
+
+    if (!idea) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(idea);
   } catch (error) {
     console.error("An error occured: ", error);
     res.status(400).json({ message: "An error occured", error: error.message });
@@ -47,13 +61,22 @@ const getOneIdea = async (req, res) => {
 };
 
 const updateIdea = async (req, res) => {
-  if (!req.params.id || typeof req.params.id === String) {
-    res.status(400).json({ message: "Bad request" });
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "Invalid ID" });
   }
 
   const { text, title } = req.body;
   try {
-    await ideas.findOneAndUpdate({ _id: req.params.id }, { text, title });
+    const updated = await ideas.findByIdAndUpdate(
+      req.params.id,
+      { text, title },
+      { new: true, runValidators: true },
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
     res.status(200).json({ message: "Idea updated successfully" });
   } catch (error) {
     console.error("An error occoured", error.message);
@@ -71,7 +94,7 @@ const addNewIdeas = async (req, res) => {
   }
 
   try {
-    await ideas.insertMany(req.body, {ordered: true});
+    await ideas.insertMany(req.body, { ordered: true });
     res.status(201).json({ message: "Success" });
   } catch (error) {
     console.error(error.message);
