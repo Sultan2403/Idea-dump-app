@@ -16,7 +16,7 @@ function App() {
       {" "}
       <Routes>
         <Route path="/" element={<Main />}>
-          <Route index element={<VoiceTest/>}/>
+          <Route index element={<Display/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

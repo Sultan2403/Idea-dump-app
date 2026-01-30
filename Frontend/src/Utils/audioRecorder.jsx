@@ -1,40 +1,29 @@
 import { useRef, useState } from "react";
+import { WavRecorder } from "wavtools";
 
-export default function AudioRecorder() {
-  const mediaRecorderRef = useRef(null);
-  const chunksRef = useRef([]);
+export default function VoiceTest() {
+  const recorder = useRef(new WavRecorder({ sampleRate: 16000, channels: 1 }));
   const [audioUrl, setAudioUrl] = useState(null);
 
   const start = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = mediaRecorder;
-    chunksRef.current = [];
-
-    mediaRecorder.ondataavailable = (e) => {
-      chunksRef.current.push(e.data);
-    };
-
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-      const url = URL.createObjectURL(blob);
-      setAudioUrl(url);
-    };
-
-    mediaRecorder.start();
+    await recorder.current.begin();
+    await recorder.current.record();
   };
 
-  const stop = () => {
-    mediaRecorderRef.current.stop();
+  const stop = async () => {
+    await recorder.current.pause();
+    const wavBlob = await recorder.current.save();
+    console.log(wavBlob);
+    await recorder.current.end();
+
+    setAudioUrl(wavBlob.url);
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div>
       <button onClick={start}>Start</button>
       <button onClick={stop}>Stop</button>
-
-      {audioUrl && <audio controls src={audioUrl} />}
+      {audioUrl && <audio src={audioUrl} controls />}
     </div>
   );
 }
