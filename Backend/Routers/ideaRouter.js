@@ -7,9 +7,11 @@ const {
   addNewIdeas,
   updateIdea,
   deleteAnIdea,
+  getOneIdea
 } = require("../Controllers/ideasControllers");
 
 router.get("/", getAllIdeas);
+router.get("/:id", getOneIdea);
 router.post("/", addNewIdea);
 router.post("/bulk", addNewIdeas);
 router.put("/:id", updateIdea);

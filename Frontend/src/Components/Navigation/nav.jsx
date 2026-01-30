@@ -1,12 +1,19 @@
 import { NavLink } from "react-router-dom";
-import {  PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon } from "lucide-react";
 import Button from "@mui/material/Button";
 import useIdeas from "../../Hooks/useIdeas";
-import { Fragment } from "react";
+import { useEffect } from "react";
 
 export default function Nav() {
-  const { ideas, loading, error } = useIdeas();
+  const ideasHook = useIdeas();
+  const { result, error, loading } = ideasHook;
 
+  useEffect(() => {
+    ideasHook.getAll();
+  }, []);
+
+
+  
   return (
     <nav className="bg-cream border-r border-borderGray w-64 min-h-screen p-4 flex flex-col">
       <h2 className="text-xl font-semibold text-softBrown mb-6">
@@ -32,18 +39,18 @@ export default function Nav() {
       )}
 
       {/* Error */}
-      {error && <p className="text-red-500 text-sm">Failed to load ideas</p>}
+      {error && <p className="text-red-500 text-sm">Failed to load result</p>}
 
       {/* Idea List */}
       {!loading && !error && (
         <ul className="flex-1 overflow-y-auto space-y-2">
-          {ideas.length === 0 ? (
-            <li className="text-gray-500 text-sm">No ideas yet...</li>
+          {result?.length === 0 ? (
+            <li className="text-gray-500 text-sm">No result yet...</li>
           ) : (
-            ideas.map((idea) => (
-              <NavLink to={`/idea/${idea._id}`}>
+            result.map((idea) => (
+              <NavLink key={idea._id} to={`/idea/${idea._id}`}>
                 <li
-                  key={idea._id}
+                 
                   className="p-2 rounded hover:bg-borderGray cursor-pointer"
                 >
                   {idea.title}

@@ -6,12 +6,12 @@ export default function useIdeas() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // single executor
   const execute = async (apiCall) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await apiCall;
+      const data = await apiCall();
+      console.log(data);      
       setResult(data);
     } catch (err) {
       setError(err);

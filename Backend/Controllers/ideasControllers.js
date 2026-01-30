@@ -12,6 +12,7 @@ const addNewIdea = async (req, res) => {
   }
 };
 
+
 const getAllIdeas = async (req, res) => {
   try {
     const fetchedIdeas = await ideas.find();
