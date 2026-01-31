@@ -15,11 +15,11 @@ const speech_to_text_controller = async (req, res) => {
         },
       },
     );
-    res.json({ res: wisprFlowRes });
+    res.json({ wisprFlowRes });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occured", error: error.message });
   }
 };
 
-module.exports =  speech_to_text_controller ;
+module.exports = speech_to_text_controller;

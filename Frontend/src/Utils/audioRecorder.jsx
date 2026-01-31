@@ -1,24 +1,17 @@
 import { useRef, useState } from "react";
 import { WavRecorder } from "wavtools";
+import api from "../Apis/client";
 
 export default function VoiceTest() {
-  const recorder = useRef(new WavRecorder({ sampleRate: 16000, channels: 1 }));
   const [audioUrl, setAudioUrl] = useState(null);
 
-  const start = async () => {
-    await recorder.current.begin();
-    await recorder.current.record();
+  const start = () => {
+    console.log("starting recorder...");
   };
 
-  const stop = async () => {
-    await recorder.current.pause();
-    const wavBlob = await recorder.current.save();
-    console.log(wavBlob);
-    await recorder.current.end();
-
-    setAudioUrl(wavBlob.url);
+  const stop = () => {
+    console.log("Stopping recorder....");
   };
-
   return (
     <div>
       <button onClick={start}>Start</button>
