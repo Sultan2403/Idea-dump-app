@@ -45,10 +45,9 @@ export default function Edit_Idea() {
   }, [ideaId]);
 
   useEffect(() => {
-    if (idea) {
-      setTitle(idea?.title || "");
-      setText(idea?.text || "");
-    }
+    const base = idea?.updated || idea;
+    setTitle(base.title);
+    setText(base.text);
   }, [idea]);
 
   if (loading) {
