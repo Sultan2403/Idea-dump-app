@@ -18,20 +18,23 @@ export default function Edit_Idea() {
 
   const updateErr = idea?.message === "An error occured";
 
+  const isSaving = useMemo(() => loading && updatedIdea, [loading, idea]);
+
+  const isFetching = useMemo(() => loading && !updatedIdea, [loading, idea]);
+
   const isEdited = useMemo(() => {
     const base = updatedIdea || idea;
-
     return (
-      base.title.trim() !== title.trim() || base.text.trim() !== text.trim()
+      base.title?.trim() !== title.trim() || base.text?.trim() !== text.trim()
     );
-  }, [idea, updatedIdea, title, text]);
+  }, [updatedIdea, idea, title, text]);
 
   const update = () => {
     const updated = {
       text: text.trim(),
       title: title.trim(),
     };
-    updateIdea({ id: idea._id, update: updated });
+    updateIdea({ id: ideaId, update: updated });
   };
 
   const fetchIdea = () => {
@@ -44,11 +47,11 @@ export default function Edit_Idea() {
 
   useEffect(() => {
     const base = idea?.updated || idea;
-    setTitle(base.title);
-    setText(base.text);
+    setTitle(base.title || "");
+    setText(base.text || "");
   }, [idea]);
 
-  if (loading) {
+  if (isFetching) {
     return (
       <div className="min-h-screen bg-cream p-6">
         <div className="max-w-3xl space-y-4 animate-pulse">
@@ -63,18 +66,18 @@ export default function Edit_Idea() {
     return (
       <>
         <div className="min-h-screen bg-cream p-6 text-secondaryText">
-          Failed to load idea. Check your internet connection and try again.
+          Failed to load idea. Check your internet connection and try again.{" "}
+          <Button
+            fullWidth
+            startIcon={<RefreshCcwIcon />}
+            onClick={fetchIdea}
+            loading={loading}
+            variant="contained"
+            className="!bg-softBrown !text-white hover:bg-softBrown/90"
+          >
+            Refresh
+          </Button>
         </div>
-        <Button
-          fullWidth
-          startIcon={<RefreshCcwIcon />}
-          onClick={fetchIdea}
-          loading={loading}
-          variant="contained"
-          className="!bg-softBrown text-white hover:bg-softBrown/90"
-        >
-          Refresh
-        </Button>
       </>
     );
   }
@@ -130,15 +133,23 @@ export default function Edit_Idea() {
             <Button variant="outlined">Cancel</Button>
           </NavLink>
 
-          {/* You wire this up */}
           <Button
             variant="contained"
             onClick={update}
-            loading={loading}
-            disabled={!isEdited}
+            loading={isSaving}
+            disabled={!isEdited || isSaving}
           >
-            Save
+            {isSaving ? "Saving..." : "Save"}
           </Button>
+          <br />
+
+          {updateSuccess && (
+            <p className="text-green-600 text-sm">Saved successfully</p>
+          )}
+
+          {updateErr && (
+            <p className="text-red-600 text-sm">Failed to save changes</p>
+          )}
         </div>
       </div>
     </div>
