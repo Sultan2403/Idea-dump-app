@@ -33,14 +33,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install  # installs packages in package.json
+        working-directory: Frontend  # <--- HERE
 
       - name: Build app
         run: npm run build  # runs Vite build, outputs to dist/
+        working-directory: Frontend  # <--- HERE
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist  # tells GitHub: this is what we want to deploy
+          path: Frontend/dist  # tells GitHub: this is what we want to deploy
 
 # --- Job 2: Deploy to GitHub Pages ---
   deploy:
