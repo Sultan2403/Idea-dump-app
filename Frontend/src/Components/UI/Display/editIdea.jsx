@@ -12,7 +12,7 @@ export default function Edit_Idea() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const updatedIdea = idea?.updated;
+  const updatedIdea = idea.updated;
 
   const updateSuccess = idea?.message === "Idea updated successfully";
 
@@ -21,10 +21,8 @@ export default function Edit_Idea() {
   const isEdited = useMemo(() => {
     const base = updatedIdea || idea;
 
-    if (!base) return false;
-
     return (
-      base?.title?.trim() !== title.trim() || base?.text?.trim() !== text.trim()
+      base.title.trim() !== title.trim() || base.text.trim() !== text.trim()
     );
   }, [idea, updatedIdea, title, text]);
 
