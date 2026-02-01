@@ -9,6 +9,7 @@ export default function ViewIdea() {
   const { result: idea, loading, error, getOneIdea } = useIdeas();
 
   const truncatedText = useMemo(() => truncateText(idea?.text), [idea]);
+  
 
   useEffect(() => {
     getOneIdea(ideaId);
@@ -34,11 +35,13 @@ export default function ViewIdea() {
     <div className="h-full bg-cream">
       <div className="p-6 flex flex-col space-y-6 max-w-3xl">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-primaryText">{idea?.title}</h1>
+        <h1 className="text-2xl font-bold text-primaryText border-b-borderGray ">
+          {idea?.title}
+        </h1>
 
         {/* Preview Text */}
         <p className="text-secondaryText whitespace-pre-wrap">
-          Preview: {truncatedText}
+          Preview: <br /> {truncatedText}
         </p>
 
         {/* Edit Button */}
@@ -58,5 +61,4 @@ export default function ViewIdea() {
       </div>
     </div>
   );
-
 }
