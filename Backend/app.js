@@ -16,7 +16,7 @@ connectDB();
 
 
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Looking for something? Well it's not here. XD" });
+  res.status(200).json({ message: " Looking for something? Well it's not here XD" });
 });
 
 
