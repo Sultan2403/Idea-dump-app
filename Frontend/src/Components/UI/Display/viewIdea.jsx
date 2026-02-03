@@ -6,16 +6,22 @@ import truncateText from "../../../Utils/truncateText";
 
 export default function ViewIdea() {
   const { ideaId } = useParams();
-  const { result: idea, loading, error, getOneIdea } = useIdeas();
+  const { result: idea, loading, error, getOneIdea, removeIdea } = useIdeas();
 
   const truncatedText = useMemo(() => truncateText(idea?.text), [idea]);
-  
+
+  const deleteIdea = () => {
+    removeIdea(ideaId);
+  };
 
   useEffect(() => {
     getOneIdea(ideaId);
   }, [ideaId]);
 
-  if (loading) return <div className="p-4 text-gray-500">Loading idea...</div>;
+  if (loading) return <div className="p-4 text-gray-500">Loading...</div>;
+
+  if (idea.message === "Deleted successfuly")
+    return <div>Idea deleted successfully.</div>;
 
   if (error)
     return (
@@ -58,6 +64,18 @@ export default function ViewIdea() {
             Edit Idea
           </Button>
         </NavLink>
+
+        <Button
+          className="
+          px-4 py-2
+          rounded
+          !bg-softBrown
+          !text-cream
+          transition-colors !font-sans"
+          onClick={deleteIdea}
+        >
+          Delete Idea
+        </Button>
       </div>
     </div>
   );

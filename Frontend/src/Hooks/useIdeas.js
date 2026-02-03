@@ -25,7 +25,7 @@ export default function useIdeas() {
     getOneIdea: (id) => execute(() => ideasApi.getOne(id)),
     createIdea: (idea) => execute(() => ideasApi.create(idea)),
     updateIdea: ({ id, update }) => execute(() => ideasApi.update({ id, update })),
-    removeIdea: (id) => execute(() => ideasApi.remove(id)),
+    removeIdea: (id) => execute(() => ideasApi.delete(id)),
   };
 
   return { result, loading, error, ...methods };
