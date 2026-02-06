@@ -1,12 +1,13 @@
 const usersCollection = require("../DB/Models/users.model");
 const bcrypt = require("bcryptjs");
 const JWT_SECRET = process.env.JWT_SECRET;
+const hashingRounds = 10
 
 const registerUser = async (req, res) => {
   try {
     const { password, ...data } = req.body;
 
-    const pwdHash = await bcrypt.hash(password, 10);
+    const pwdHash = await bcrypt.hash(password, hashingRounds);
     await usersCollection.create({ ...data, password: pwdHash });
     res
       .status(201)
