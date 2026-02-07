@@ -2,8 +2,10 @@ const ideas = require("../DB/Models/ideas.model");
 const mongoose = require("mongoose");
 
 const addNewIdea = async (req, res) => {
+  const userId = req.user.id;
+  const data = { ...req.body, userId };
   try {
-    const idea = await ideas.insertOne(req.body);
+    const idea = await ideas.insertOne(data);
 
     res.status(201).json({ message: "Success", idea });
   } catch (error) {
@@ -13,9 +15,10 @@ const addNewIdea = async (req, res) => {
   }
 };
 
-const getAllIdeas = async (req, res) => {
+const getUserIdeas = async (req, res) => {
+  const userId = req.user.id;
   try {
-    const fetchedIdeas = await ideas.find();
+    const fetchedIdeas = await ideas.find({ userId });
     res.status(200).json(fetchedIdeas);
   } catch (err) {
     res.status(500).json({ message: "An error occured", error: err.message });
@@ -115,7 +118,7 @@ const addNewIdeas = async (req, res) => {
   }
 };
 module.exports = {
-  getAllIdeas,
+  getUserIdeas,
   getOneIdea,
   deleteAnIdea,
   updateIdea,
